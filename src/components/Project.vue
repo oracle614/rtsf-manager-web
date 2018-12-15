@@ -2,24 +2,13 @@
 <template>
     <div>
         <div>
-            <table border="1">
-                <tr>
-                    <th></th>
-                    <th>项目名称</th>
-                    <th>项目模块</th>
-                    <th>备注</th>
-                    <th>创建时间</th>
-                    <th>更新时间</th>
-                </tr>
-                <tr v-for="(res, index) in search_result" :key="res.id">
-                    <td v-text="index"></td>
-                    <td v-text="res.name"></td>
-                    <td v-text="res.module"></td>
-                    <td v-text="res.comment"></td>
-                    <td v-text="res.c_time"></td>
-                    <td v-text="res.u_time"></td>
-                </tr>
-            </table>
+          <el-table :data="tableData" style="width: 100%">
+            <el-table-column prop="name" label="项目名称" width="180"/>
+            <el-table-column prop="module" label="项目模块" width="180"/>
+            <el-table-column prop="comment" label="备注"/>
+            <el-table-column prop="c_time" label="创建时间"/>
+            <el-table-column prop="u_time" label="更新时间"/>
+          </el-table>
         </div>
 
         <h1>新增待测试项目</h1>
@@ -52,9 +41,9 @@
         name: 'Project',
         data: function () {
             return {
-                proj_url: "http://127.0.0.1:5000/project/",
+                proj_url: "http://127.0.0.1:5000/project/manager",
                 project: {},
-                search_result: []
+                tableData: []
             }
         },
         mounted: function() {
@@ -62,26 +51,22 @@
         },
         methods: {
             create_project: function() {
-                this.$http.post(this.proj_url, this.project)
+                this.$axios.post(this.proj_url, this.project)
                 .then(function (response) {
                     console.log(response);
-                    console.log(this.project);
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
             },
             delete_project: function() {
-                this.$http.delete(this.proj_url + "?proj_id=8")
-                .then(function (response) {
-                    console.log("delete ok");
-                })
+                this.$axios.delete(this.proj_url + "?proj_id=8")
                 .catch(function (error) {
                     console.log(error);
                 });
             },
             edit_project: function() {
-                this.$http.put(this.proj_url + "?proj_id=8", this.project)
+                this.$axios.put(this.proj_url + "?proj_id=10", this.project)
                 .then(function (response) {
                   console.log("update ok");
                 })
@@ -90,14 +75,15 @@
                 });
             },
             get_projects: function() {
-                this.$http.get(this.proj_url)
+                var _this = this
+                this.$axios.get(this.proj_url)
                 .then(function (response) {
-                    console.log(response.data);
-                    console.log(response.status);
-                    console.log(response.statusText);
-                    console.log(response.headers);
-                    console.log(response.config);
-                    this.search_result=response.data.result
+                    // console.log(response.data);
+                    // console.log(response.status);
+                    // console.log(response.statusText);
+                    // console.log(response.headers);
+                    // console.log(response.config);
+                    _this.tableData=response.data.result
                 })
                 .catch(function (error) {
                     console.log(error);
