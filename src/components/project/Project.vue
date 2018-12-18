@@ -3,11 +3,18 @@
     <div>
         <div>
           <el-table :data="tableData" style="width: 100%">
+            <el-table-column type="index" :index="indexMethod" width="180"/>
             <el-table-column prop="name" label="项目名称" width="180"/>
             <el-table-column prop="module" label="项目模块" width="180"/>
             <el-table-column prop="comment" label="备注"/>
             <el-table-column prop="c_time" label="创建时间"/>
             <el-table-column prop="u_time" label="更新时间"/>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  <el-button size="mini" type="danger" @click="delete_project(scope.$index, scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
           </el-table>
         </div>
 
@@ -50,6 +57,9 @@
             this.get_projects()
         },
         methods: {
+            indexMethod(index) {
+              return index + 1;
+            },
             create_project: function() {
                 this.$axios.post(this.proj_url, this.project)
                 .then(function (response) {
@@ -59,13 +69,19 @@
                     console.log(error);
                 });
             },
-            delete_project: function() {
-                this.$axios.delete(this.proj_url + "?proj_id=8")
+            delete_project: function(index, row) {
+                // console.log(index, row);
+                var _this = this
+                this.$axios.delete(this.proj_url + "?proj_id=" + row.id)
+                .then(function(response) {
+                  _this.get_projects();
+                })
                 .catch(function (error) {
                     console.log(error);
                 });
             },
-            edit_project: function() {
+            edit_project: function(index, row) {
+                // console.log(index, row);
                 this.$axios.put(this.proj_url + "?proj_id=10", this.project)
                 .then(function (response) {
                   console.log("update ok");
@@ -73,6 +89,9 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+            },
+            handleEdit(index, row) {
+              console.log(index, row);
             },
             get_projects: function() {
                 var _this = this
