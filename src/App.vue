@@ -1,13 +1,28 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <el-container>
+      <el-header>
+        <NavMenu/>
+      </el-header>
+
+      <el-main>
+        <router-view/>
+      </el-main>
+
+      <el-footer>
+        !@!@L#KJ@!
+      </el-footer>
+    </el-container>
   </div>
 </template>
 
 <script>
+import NavMenu from "./components/NavMenu"
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    NavMenu
+  }
 }
 </script>
 
