@@ -3,7 +3,7 @@
     <div>
         <div>
           <el-button size="mini" @click="form_handler">添加项目</el-button>
-          <el-table :data="tableData" style="width: 100%">
+          <el-table :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)" style="width: 100%">
             <el-table-column type="index" :index="indexMethod" width="180"/>
             <el-table-column prop="name" label="项目名称" width="180"/>
             <el-table-column prop="module" label="项目模块" width="180"/>
@@ -17,6 +17,15 @@
                 </template>
             </el-table-column>
           </el-table>
+        </div>
+        <div style="width: 100%">
+          <el-pagination layout="total, sizes, prev, pager, next, jumper"
+            :page-sizes="[10, 20, 30]"
+            :page-size="pagesize"
+            :total="tableData.length"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange">
+          </el-pagination>
         </div>
 
         <el-dialog :title="dialog_config.title" :visible.sync="dialog_config.edit_dialog_form_visible">
@@ -40,6 +49,7 @@
 </template>
 
 <script>
+    import test from '@/components/test.vue'
     export default {
         name: 'Project',
         data: function () {
@@ -51,8 +61,13 @@
                   edit_dialog_form_visible: false,
                 },
                 project: {},
-                tableData: []
+                tableData: [],
+                pagesize: 10,
+                currpage: 1,
             }
+        },
+        components: {
+          test
         },
         mounted: function() {
             this.get_projects()
@@ -121,20 +136,13 @@
                     console.log(error);
                 });
             },
-            get_project: function() {
-                var _this = this
-                this.$axios.get(this.proj_url + "?proj_id=" + row.id)
-                .then(function (response) {
-                    // console.log(response.data);
-                    // console.log(response.status);
-                    // console.log(response.statusText);
-                    // console.log(response.headers);
-                    // console.log(response.config);
-                    _this.tableData=response.data.result
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            handleSizeChange(val) {
+              // console.log(`每页 ${val} 条`);
+              this.pagesize = val;
+            },
+            handleCurrentChange(val) {
+              // console.log(`当前页: ${val}`);
+              this.currpage = val;
             }
         }
     }

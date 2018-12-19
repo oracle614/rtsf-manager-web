@@ -10,7 +10,7 @@
       </el-main>
 
       <el-footer>
-        !@!@L#KJ@!
+        ！@#！@#！@#@！
       </el-footer>
     </el-container>
   </div>
