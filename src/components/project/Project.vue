@@ -49,7 +49,6 @@
 </template>
 
 <script>
-    import test from '@/components/test.vue'
     export default {
         name: 'Project',
         data: function () {
@@ -65,9 +64,6 @@
                 pagesize: 10,
                 currpage: 1,
             }
-        },
-        components: {
-          test
         },
         mounted: function() {
             this.get_projects()
@@ -133,7 +129,7 @@
                     _this.tableData=response.data.result
                 })
                 .catch(function (error) {
-                    console.log(error);
+                  console.log(error);
                 });
             },
             handleSizeChange(val) {
