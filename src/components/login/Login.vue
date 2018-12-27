@@ -70,6 +70,8 @@
             this.$axios.post(this.auth_url + "/login", this.login_form)
             .then(function (response) {
               console.log(response.data);
+              console.log(response.headers);
+
             })
             .catch(function (error) {
                 console.log(error);
