@@ -26,19 +26,19 @@ const router = new Router({
   routes: routes
 })
 
-router.beforeEach((to, from, next) => {
-  let token = window.localStorage.getItem('token')
-  console.log(token)
-  if (to.matched.some(record => record.meta.requiresAuth) && (!token || token === null)) {
-    next({
-      path: '/login',
-      query: { redirect: to.fullPath }
-    })
-    console.log('here 2')
-  } else {
-    console.log('here 1')
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   let token = window.localStorage.getItem('token')
+//   console.log(":"+token)
+//   debugger
+//   if (to.matched.some(record => record.meta.requireAuth) && (!token || token === null)) {
+//     next({
+//       path: '/',
+//       query: {redirect: to.fullPath}
+//     })
+//   } else {
+//     next();
+//   }
+// })
+
 
 export default router
