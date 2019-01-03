@@ -1,28 +1,33 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header>
-        <NavMenu/>
-      </el-header>
-
-      <el-main>
-        <router-view/>
-      </el-main>
-
-      <el-footer>
-        ！@#！@#！@#@！
-      </el-footer>
-    </el-container>
-
+    <div v-if='is_login()'>
+        <index/>
+    </div>
+    <div v-else>
+      <Login/>
+    </div>
   </div>
 </template>
 
 <script>
-import NavMenu from "./components/NavMenu"
+import index from "@/components/index.vue"
+import Login from '@/components/login/Login.vue'
+
 export default {
   name: 'App',
   components: {
-    NavMenu
+    index,
+    Login
+  },
+  methods: {
+    is_login() {
+      let token = $cookies.get('token')
+      if (token) {
+        return true
+      } else {
+        return false
+      }
+    },
   }
 }
 </script>

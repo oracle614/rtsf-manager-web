@@ -8,17 +8,12 @@
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="login_form.password" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('login_form')">提交</el-button>
-          <el-button @click="resetForm('login_form')">重置</el-button>
-        </el-form-item>
       </el-form>
     </div>
     <div>
-      <el-button @click="logout()">登出</el-button>
+      <el-button type="primary" @click="submitForm('login_form')">提交</el-button>
+      <el-button @click="resetForm('login_form')">重置</el-button>      
     </div>
-
-
   </div>
 </template>
 
@@ -30,7 +25,8 @@
         auth_url: "http://127.0.0.1:5000/auth",
         login_form: {
           username: '',
-          password: ''
+          password: '',
+          remember: true
         },
         rule: {
           username:[
@@ -73,11 +69,12 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // alert('submit!');
+            var _this = this
             this.$axios.post(this.auth_url + "/login", this.login_form)
             .then(function (response) {
-              console.log(response.data);
-              console.log(response.headers);
-
+              console.log(response.data)
+              _this.$router.push({path: "/"})
+              window.location.reload()
             })
             .catch(function (error) {
                 console.log(error);
