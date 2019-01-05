@@ -26,9 +26,14 @@ export default {
   },
   methods: {
     logout(formName) {
+      var _this = this
       this.$axios.get(this.auth_url + "/logout")
-      this.$router.push({path: "/"})
-      window.location.reload()
+      .then(function(response) {        
+        _this.$router.go(0)
+      })
+      .catch(function (error) {
+          console.log(error);
+      });
     }
   }
 }

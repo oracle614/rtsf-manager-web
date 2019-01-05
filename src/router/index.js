@@ -9,12 +9,9 @@ Vue.use(Router)
 
 const routes = [
   {
-    path: '/login',
-    component: Login
-  },
-  {
-      path: "/project",
-      component: Project
+    name: 'project',
+    path: "/project",
+    component: Project
   }
 ]
 
@@ -24,7 +21,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   let token = $cookies.get('token')
-  console.log(token)
   if (token || to.path === '/login') {
     next()
   } else {

@@ -12,7 +12,7 @@
     </div>
     <div>
       <el-button type="primary" @click="submitForm('login_form')">提交</el-button>
-      <el-button @click="resetForm('login_form')">重置</el-button>      
+      <el-button @click="resetForm('login_form')">重置</el-button>
     </div>
   </div>
 </template>
@@ -72,9 +72,8 @@
             var _this = this
             this.$axios.post(this.auth_url + "/login", this.login_form)
             .then(function (response) {
-              console.log(response.data)
-              _this.$router.push({path: "/"})
-              window.location.reload()
+              // console.log(response.data)              
+              _this.$router.go(0)
             })
             .catch(function (error) {
                 console.log(error);
@@ -87,10 +86,12 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      },
-      logout(formName) {
-        this.$axios.get(this.auth_url + "/logout")
       }
     }
+    // watch: {
+    //   '$route' (to, from) {
+    //     this.$router.go(0);
+    //   }
+    // }
   }
 </script>
