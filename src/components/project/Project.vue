@@ -130,6 +130,8 @@
                 })
                 .catch(function (error) {
                   console.log(error);
+                  $cookies.remove('token')
+                  _this.$router.go(0)
                 });
             },
             handleSizeChange(val) {

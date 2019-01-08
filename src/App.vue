@@ -12,12 +12,14 @@
 <script>
 import index from "@/components/index.vue"
 import Login from '@/components/login/Login.vue'
+import test from '@/components/test.vue'
 
 export default {
   name: 'App',
   components: {
     index,
-    Login
+    Login,
+    test
   },
   methods: {
     is_login() {

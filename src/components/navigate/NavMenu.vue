@@ -6,7 +6,7 @@
              >
       <!-- <el-menu-item index="/login">注册/登录</el-menu-item> -->
       <el-menu-item index="/project">测试项目管理</el-menu-item>
-      <el-menu-item index="/menu_a">menu_a</el-menu-item>
+      <el-menu-item index="/menu_a">menu_a</el-menu-item>      
       <el-menu-item index="/about" :disabled="true">关于</el-menu-item>
       <div>
         <el-button @click="logout()" type="text" :disabled="false">登出</el-button>
@@ -28,7 +28,7 @@ export default {
     logout(formName) {
       var _this = this
       this.$axios.get(this.auth_url + "/logout")
-      .then(function(response) {        
+      .then(function(response) {
         _this.$router.go(0)
       })
       .catch(function (error) {

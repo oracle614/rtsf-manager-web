@@ -1,20 +1,17 @@
 <template lang="html">
-  <div>
-    <div>
-      <el-form :model="login_form" :rules="rule" ref="login_form" label-width="100px">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="login_form.username" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="login_form.password" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div>
-      <el-button type="primary" @click="submitForm('login_form')">提交</el-button>
-      <el-button @click="resetForm('login_form')">重置</el-button>
-    </div>
-  </div>
+  <el-form :model="login_form" :rules="rule" ref="login_form" label-position="left" label-width="100px" class="login-box">
+    <h3 class="title">系统登录</h3>
+    <el-form-item label="用户名" prop="username">
+      <el-input v-model="login_form.username" placeholder="请输入帐号" auto-complete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="密码" prop="password">
+      <el-input type="password" v-model="login_form.password" placeholder="请输入密码" auto-complete="off"></el-input>
+    </el-form-item>
+    <el-form-item style="width:100%;">
+      <el-button type="primary" style="width:100%" @click="submitForm('login_form')">登录</el-button>
+      <!-- <el-button @click="resetForm('login_form')">重置</el-button> -->
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
@@ -72,7 +69,7 @@
             var _this = this
             this.$axios.post(this.auth_url + "/login", this.login_form)
             .then(function (response) {
-              // console.log(response.data)              
+              // console.log(response.data)
               _this.$router.go(0)
             })
             .catch(function (error) {
@@ -88,10 +85,26 @@
         this.$refs[formName].resetFields();
       }
     }
-    // watch: {
-    //   '$route' (to, from) {
-    //     this.$router.go(0);
-    //   }
-    // }
   }
 </script>
+
+<style>
+  .login-box {
+    /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    background-clip: padding-box;
+    margin: 180px auto;
+    width: 350px;
+    padding: 35px 35px 15px 35px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+    .title {
+      margin: 0px auto 40px auto;
+      text-align: center;
+      color: #505458;
+    }
+  }
+</style>

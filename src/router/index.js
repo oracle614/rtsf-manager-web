@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import index from '@/components/index'
 import Project from '@/components/project/Project.vue'
 import Login from '@/components/login/Login.vue'
-
+import test from '@/components/test.vue'
 
 Vue.use(Router)
 
@@ -12,6 +12,11 @@ const routes = [
     name: 'project',
     path: "/project",
     component: Project
+  },
+  {
+    name: 'test',
+    path: '/test',
+    component: test
   }
 ]
 
