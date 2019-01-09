@@ -1,37 +1,15 @@
 <template>
-  <div id="app">
-    <div v-if='is_login()'>
-        <index/>
-    </div>
-    <div v-else>
-      <Login/>
-    </div>
-  </div>
+	<div id="app">
+		<transition name="fade" mode="out-in">
+			<router-view></router-view>
+		</transition>
+	</div>
 </template>
 
 <script>
-import index from "@/components/index.vue"
-import Login from '@/components/login/Login.vue'
-import test from '@/components/test.vue'
-
-export default {
-  name: 'App',
-  components: {
-    index,
-    Login,
-    test
-  },
-  methods: {
-    is_login() {
-      let token = $cookies.get('token')
-      if (token) {
-        return true
-      } else {
-        return false
-      }
-    },
-  }
-}
+	export default {
+	  name: 'App'
+	}
 </script>
 
 <style>

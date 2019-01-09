@@ -2,7 +2,7 @@
 <template>
     <div>
         <div>
-          <el-button size="mini" @click="form_handler">添加项目</el-button>
+          <el-button size="mini" @click="form_handler" >添加项目</el-button>
           <el-table :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)" style="width: 100%">
             <el-table-column type="index" :index="indexMethod" width="180"/>
             <el-table-column prop="name" label="项目名称" width="180"/>
@@ -24,7 +24,8 @@
             :page-size="pagesize"
             :total="tableData.length"
             @size-change="handleSizeChange"
-            @current-change="handleCurrentChange">
+            @current-change="handleCurrentChange"
+            style="float:left;">
           </el-pagination>
         </div>
 
@@ -49,99 +50,75 @@
 </template>
 
 <script>
-    export default {
-        name: 'Project',
-        data: function () {
-            return {
-                proj_url: "http://127.0.0.1:5000/project/manager",
-                dialog_config: {
-                  title: "",
-                  label_position: "right",
-                  edit_dialog_form_visible: false,
-                },
-                project: {},
-                tableData: [],
-                pagesize: 10,
-                currpage: 1,
-            }
-        },
-        mounted: function() {
-            this.get_projects()
-        },
-        methods: {
+  import {create_project, update_project, del_project, get_project} from '@/api/api';
+  export default {
+      name: 'Project',
+      data: function () {
+          return {
+              dialog_config: {
+                title: "",
+                label_position: "right",
+                edit_dialog_form_visible: false,
+              },
+              project: {},
+              tableData: [],
+              pagesize: 10,
+              currpage: 1,
+          }
+      },
+      mounted: function() {
+          this.get_projects()
+      },
+      methods: {
 
-            indexMethod(index) {
-              return index + 1;
-            },
+          indexMethod(index) {
+            return index + 1;
+          },
 
-            form_handler: function(index, row){
-                // console.log(index, row, JSON.parse(JSON.stringify(row)));
-                this.dialog_config.edit_dialog_form_visible = true;
-                if(typeof(row)=="undefined") {
-                  this.dialog_config.title = "添加项目"
-                  this.project = {};
-                } else {
-                  this.dialog_config.title = "编辑项目"
-                  this.project=JSON.parse(JSON.stringify(row));
-                }
-            },
+          form_handler: function(index, row){
+              // console.log(index, row, JSON.parse(JSON.stringify(row)));
+              this.dialog_config.edit_dialog_form_visible = true;
+              if(typeof(row)=="undefined") {
+                this.dialog_config.title = "添加项目"
+                this.project = {};
+              } else {
+                this.dialog_config.title = "编辑项目"
+                this.project=JSON.parse(JSON.stringify(row));
+              }
+          },
 
-            submit_form: function() {
-                var _this = this
-                this.dialog_config.edit_dialog_form_visible=false;
-                if(typeof(this.project.id) == "undefined") {
-                  // create_project
-                  var resp =this.$axios.post(this.proj_url, this.project)
-                }else {
-                  // update_project
-                  var resp = this.$axios.put(this.proj_url + "?proj_id=" + this.project.id, this.project)
-                }
-                resp.then(function (response) {
-                  // console.log(response);
-                  _this.get_projects();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            },
+          submit_form: function() {
+              var _this = this
+              this.dialog_config.edit_dialog_form_visible=false;
+              if(typeof(this.project.id) == "undefined") {
+                var resp = create_project(this.project)
+              }else {
+                var resp = update_project(this.project)
+              }
+              resp.then(resp => this.get_projects())
+              .catch(error => console.log(error))
+          },
 
-            delete_project: function(index, row) {
-                // console.log(index, row);
-                var _this = this
-                this.$axios.delete(this.proj_url + "?proj_id=" + row.id)
-                .then(function(response) {
-                  _this.get_projects();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            },
+          delete_project: function(index, row) {
+              // console.log(index, row);
+              del_project(row)
+              .then(resp => this.get_projects())
+              .catch(error => console.log(error))
+          },
 
-            get_projects: function() {
-                var _this = this
-                this.$axios.get(this.proj_url)
-                .then(function (response) {
-                    // console.log(response.data);
-                    // console.log(response.status);
-                    // console.log(response.statusText);
-                    // console.log(response.headers);
-                    // console.log(response.config);
-                    _this.tableData=response.data.result
-                })
-                .catch(function (error) {
-                  console.log(error);
-                  $cookies.remove('token')
-                  _this.$router.go(0)
-                });
-            },
-            handleSizeChange(val) {
-              // console.log(`每页 ${val} 条`);
-              this.pagesize = val;
-            },
-            handleCurrentChange(val) {
-              // console.log(`当前页: ${val}`);
-              this.currpage = val;
-            }
-        }
-    }
+          get_projects: function() {
+              get_project()
+              .then(resp => this.tableData=resp.data.result)
+              .catch(error => console.log(error))
+          },
+          handleSizeChange(val) {
+            // console.log(`每页 ${val} 条`);
+            this.pagesize = val;
+          },
+          handleCurrentChange(val) {
+            // console.log(`当前页: ${val}`);
+            this.currpage = val;
+          }
+      }
+  }
 </script>

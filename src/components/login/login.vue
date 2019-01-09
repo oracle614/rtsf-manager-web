@@ -8,17 +8,19 @@
       <el-input type="password" v-model="login_form.password" placeholder="请输入密码" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%" @click="submitForm('login_form')">登录</el-button>
+      <el-button type="primary" style="width:100%" @click.native.prevent="submitForm('login_form')" :loading="logining">登录</el-button>
       <!-- <el-button @click="resetForm('login_form')">重置</el-button> -->
     </el-form-item>
   </el-form>
 </template>
 
 <script>
+  import { req_login } from '@/api/api';
   export default {
     name: 'Login',
     data() {
       return {
+        logining: false,
         auth_url: "http://127.0.0.1:5000/auth",
         login_form: {
           username: '',
@@ -65,15 +67,20 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // alert('submit!');
-            var _this = this
-            this.$axios.post(this.auth_url + "/login", this.login_form)
-            .then(function (response) {
-              // console.log(response.data)
-              _this.$router.go(0)
-            })
-            .catch(function (error) {
-                console.log(error);
+            this.logining = true;
+            req_login(this.login_form)
+            .then(data => {
+              this.logining = false;
+              if (data.status !== true) {
+                this.$message({
+                  message: data.message,
+                  type: 'error'
+                });
+              } else {
+                sessionStorage.setItem('token', JSON.stringify(data.result.token));
+                sessionStorage.setItem('username', JSON.stringify(data.result.username));
+                this.$router.push({ path: '/index' });
+              }
             });
           } else {
             console.log('error submit!!');

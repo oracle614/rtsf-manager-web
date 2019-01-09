@@ -9,10 +9,10 @@
         <router-view/>
       </el-main>
 
-      <el-footer>
+      <!-- <el-footer>
         年少不知愁滋味，爱登层楼；爱登层楼，为赋新词强说愁；<br/>
         如今识尽愁滋味，欲说还休；欲说还休，却道天凉好个秋。
-      </el-footer>
+      </el-footer> -->
     </el-container>
   </div>
 </template>
@@ -25,3 +25,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>
