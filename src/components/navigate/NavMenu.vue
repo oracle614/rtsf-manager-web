@@ -3,7 +3,7 @@
     <el-menu mode="horizontal"
              :router="true"
              :defaultActive="initPath"
-             >      
+             >
       <el-menu-item index="/project">测试项目管理</el-menu-item>
       <el-menu-item index="/menu_a">menu_a</el-menu-item>
       <el-menu-item index="/about" :disabled="true">关于</el-menu-item>
@@ -20,13 +20,14 @@
     name: "NavMenu",
     data () {
       return {
-        auth_url: "http://127.0.0.1:5000/auth",
         initPath: "/pjut"
       }
     },
     methods: {
       logout(formName) {
-        req_logout().then(data => {this.$router.push({ path: '/login' });})
+        req_logout()
+        .then(data => {this.$router.push({ path: '/login' });})
+        .catch(error => {this.$router.push({ path: '/login' });})
       }
     }
   }

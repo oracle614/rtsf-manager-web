@@ -3,7 +3,7 @@
     <div>
         <div>
           <el-button size="mini" @click="form_handler" >添加项目</el-button>
-          <el-table :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)" style="width: 100%">
+          <el-table :data="tableData" style="width: 100%">
             <el-table-column type="index" :index="indexMethod" width="180"/>
             <el-table-column prop="name" label="项目名称" width="180"/>
             <el-table-column prop="module" label="项目模块" width="180"/>
@@ -22,7 +22,7 @@
           <el-pagination layout="total, sizes, prev, pager, next, jumper"
             :page-sizes="[10, 20, 30]"
             :page-size="pagesize"
-            :total="tableData.length"
+            :total="total"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             style="float:left;">
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import {create_project, update_project, del_project, get_project} from '@/api/api';
+  import {create_project, update_project, del_project, get_project_list_page} from '@/api/api';
   export default {
       name: 'Project',
       data: function () {
@@ -62,6 +62,7 @@
               },
               project: {},
               tableData: [],
+              total: 0,
               pagesize: 10,
               currpage: 1,
           }
@@ -106,18 +107,25 @@
               .catch(error => console.log(error))
           },
 
-          get_projects: function() {
-              get_project()
-              .then(resp => this.tableData=resp.data.result)
+          get_projects: function(params) {
+              get_project_list_page(params)
+              .then(resp => {
+                this.total = resp.data.result.total
+                this.tableData = resp.data.result.projects
+              })
               .catch(error => console.log(error))
           },
           handleSizeChange(val) {
             // console.log(`每页 ${val} 条`);
             this.pagesize = val;
+            var param = {"page": this.currpage, "size": val}
+            this.get_projects(param)
           },
           handleCurrentChange(val) {
             // console.log(`当前页: ${val}`);
             this.currpage = val;
+            var param = {"page": val, "size": this.pagesize}
+            this.get_projects(param)
           }
       }
   }

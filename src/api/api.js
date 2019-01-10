@@ -16,7 +16,7 @@ export const update_project = params => { return axios.put(`${base}/project/mana
 
 export const del_project = params => { return axios.delete(`${base}/project/manager?proj_id=${params.id}`); };
 
-export const get_project = params => { return axios.get(`${base}/project/manager`, { params: params }); };
+export const get_project_list_page = params => { return axios.get(`${base}/project/manager`, { params: params }); };
 
 export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
 
