@@ -11,6 +11,7 @@
       <el-button type="primary" style="width:100%" @click.native.prevent="submitForm('login_form')" :loading="logining">登录</el-button>
       <!-- <el-button @click="resetForm('login_form')">重置</el-button> -->
     </el-form-item>
+    <el-button @click="register_func">注册</el-button>
   </el-form>
 </template>
 
@@ -21,7 +22,6 @@
     data() {
       return {
         logining: false,
-        auth_url: "http://127.0.0.1:5000/auth",
         login_form: {
           username: '',
           password: '',
@@ -87,6 +87,9 @@
             return false;
           }
         });
+      },
+      register_func() {
+        this.$router.push({ path: '/register' });
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import index from '@/components/index'
 import Project from '@/components/project/Project.vue'
 import Login from '@/components/login/Login.vue'
+import Register from '@/components/login/Register.vue'
 import NotFound from '@/components/404.vue'
 import test from '@/components/test.vue'
 
@@ -12,6 +13,12 @@ const routes = [
   {
       path: '/login',
       component: Login,
+      name: '',
+      hidden: true
+  },
+  {
+      path: '/register',
+      component: Register,
       name: '',
       hidden: true
   },
@@ -48,7 +55,9 @@ router.beforeEach((to, from, next) => {
     sessionStorage.removeItem('token');
   }
   let token = JSON.parse(sessionStorage.getItem('token'));
-  if (!token && to.path != '/login') {
+  if (to.path == '/register') {
+    next()
+  } else if (!token && to.path != '/login') {
     next({ path: '/login' })
   } else {
     next()
