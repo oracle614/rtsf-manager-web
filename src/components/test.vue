@@ -1,6 +1,6 @@
 <template>
   <div>
-    rose-It's a rose
+    rose-It's a  rose
   </div>
 
 </template>
