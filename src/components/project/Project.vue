@@ -30,21 +30,23 @@
         </div>
 
         <el-dialog :title="dialog_config.title" :visible.sync="dialog_config.edit_dialog_form_visible">
-          <el-form :label-position="dialog_config.label_position" label-width="80px" :model="project" :rules="rule" ref="project_form">
-            <el-form-item label="项目名称" prop="name">
-              <el-input v-model="project.name"/>
-            </el-form-item>
-            <el-form-item label="待测模块" prop="module">
-              <el-input v-model="project.module"/>
-            </el-form-item>
-            <el-form-item label="备注">
-              <el-input v-model="project.comment"/>
-            </el-form-item>
-          </el-form>
-          <div slot="footer">
-            <el-button @click="dialog_config.edit_dialog_form_visible=false">取 消</el-button>
-            <el-button type="primary" @click="submit_form">确 定</el-button>
-          </div>
+          <section class="form-section">
+            <el-form :label-position="dialog_config.label_position" label-width="80px" :model="project" :rules="rule" ref="project_form">
+              <el-form-item label="项目名称" prop="name">
+                <el-input v-model="project.name"/>
+              </el-form-item>
+              <el-form-item label="待测模块" prop="module">
+                <el-input v-model="project.module"/>
+              </el-form-item>
+              <el-form-item label="备注">
+                <el-input v-model="project.comment"/>
+              </el-form-item>
+              <el-form-item>
+                <el-button @click="dialog_config.edit_dialog_form_visible=false">取 消</el-button>
+                <el-button type="primary" @click="submit_form">确 定</el-button>
+              </el-form-item>
+            </el-form>
+          </section>
         </el-dialog>
     </div>
 </template>
@@ -170,3 +172,10 @@
       }
   }
 </script>
+
+<style>
+  .form-section {
+    padding: 10px;
+    width: 500px;
+  }
+</style>
