@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import index from '@/components/index'
-import Project from '@/components/project/Project.vue'
 import Login from '@/components/login/Login.vue'
 import Register from '@/components/login/Register.vue'
 import NotFound from '@/components/404.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
+
+import Project from '@/components/project/Project.vue'
+import Case from '@/components/case/Case.vue'
 
 Vue.use(Router)
 
@@ -18,7 +20,8 @@ const routes = [
     path: '/index',
     component: index,
     children: [
-        { path: '/project', component: Project, name: '项目主页' }
+        { path: '/project', component: Project, name: '项目管理' },
+        { path: '/case', component: Case, name: '用例管理' }
     ]
   },
   {

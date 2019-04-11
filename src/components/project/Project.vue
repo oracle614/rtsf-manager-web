@@ -1,7 +1,8 @@
 
 <template>
     <div>
-        <div>
+      <Pagination :total="total" @get_total="get_projects">
+        <div slot="table">
           <el-button size="mini" @click="form_handler" >添加项目</el-button>
           <el-table :data="tableData" style="width: 100%">
             <el-table-column type="index" :index="indexMethod" width="180"/>
@@ -18,16 +19,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <div style="width: 100%">
-          <el-pagination layout="total, sizes, prev, pager, next, jumper"
-            :page-sizes="[10, 20, 30]"
-            :page-size="pagesize"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            style="float:left;">
-          </el-pagination>
-        </div>
+      </Pagination>
 
         <el-dialog :title="dialog_config.title" :visible.sync="dialog_config.edit_dialog_form_visible">
           <section class="form-section">
@@ -53,123 +45,112 @@
 
 <script>
   import {create_project, update_project, del_project, get_project_list_page} from '@/api/api';
+  import Pagination from "@/components/common/Pagination.vue"
   export default {
       name: 'Project',
+      components: {
+        Pagination,
+      },
       data: function () {
-          return {
-              dialog_config: {
-                title: "",
-                label_position: "right",
-                edit_dialog_form_visible: false,
-              },
-              project: {},
-              tableData: [],
-              total: 0,
-              pagesize: 10,
-              currpage: 1,
-              rule: {
-                name:[
-                    {
-                        required: true,
-                        message: '请输入待测项目',
-                        trigger: 'blur'
-                    },
-                    {
-                        pattern: /[\u4E00-\u9FA5\w]+/,
-                        message: '用户名只能为中文、字母、数字、下划线'
-                    }
-                ],
-                module:[
-                    {
-                        required: true,
-                        message: '请输入待测模块',
-                        trigger: 'blur'
-                    },
-                    {
-                        pattern: /[\u4E00-\u9FA5\w]+/,
-                        message: '用户名只能为中文、字母、数字、下划线'
-                    }
-                ]
-              }
-          }
-      },
-      mounted: function() {
-          this.get_projects()
-      },
-      methods: {
-
-          indexMethod(index) {
-            return index + 1;
-          },
-
-          form_handler: function(index, row){
-              // console.log(index, row, JSON.parse(JSON.stringify(row)));
-              this.dialog_config.edit_dialog_form_visible = true;
-              if(typeof(row)=="undefined") {
-                this.dialog_config.title = "添加项目"
-                this.project = {};
-              } else {
-                this.dialog_config.title = "编辑项目"
-                this.project=JSON.parse(JSON.stringify(row));
-              }
-          },
-
-          submit_form: function() {
-            this.$refs['project_form'].validate((valid) => {
-              if (valid) {
-                if(typeof(this.project.id) == "undefined") {
-                  var resp = create_project(this.project)
-                }else {
-                  var resp = update_project(this.project)
-                }
-
-                resp.then(resp => {
-                  if (resp.status !== true) {
-                    this.$message({
-                      message: resp.message,
-                      type: 'error'
-                    });
-                  } else {
-                    this.dialog_config.edit_dialog_form_visible=false;
-                    this.get_projects()
+        return {
+            dialog_config: {
+              title: "",
+              label_position: "right",
+              edit_dialog_form_visible: false,
+            },
+            project: {},
+            tableData: [],
+            total: 0,
+            rule: {
+              name:[
+                  {
+                      required: true,
+                      message: '请输入待测项目',
+                      trigger: 'blur'
+                  },
+                  {
+                      pattern: /[\u4E00-\u9FA5\w]+/,
+                      message: '用户名只能为中文、字母、数字、下划线'
                   }
-                })
-                .catch(error => console.log(error))
-              } else {
-                console.log('error submit!!');
-                return false;
+              ],
+              module:[
+                  {
+                      required: true,
+                      message: '请输入待测模块',
+                      trigger: 'blur'
+                  },
+                  {
+                      pattern: /[\u4E00-\u9FA5\w]+/,
+                      message: '用户名只能为中文、字母、数字、下划线'
+                  }
+              ]
+            }
+        }
+      },
+    mounted: function() {
+        this.get_projects()
+    },
+    methods: {
+
+        indexMethod(index) {
+          return index + 1;
+        },
+
+        form_handler: function(index, row){
+            // console.log(index, row, JSON.parse(JSON.stringify(row)));
+            this.dialog_config.edit_dialog_form_visible = true;
+            if(typeof(row)=="undefined") {
+              this.dialog_config.title = "添加项目"
+              this.project = {};
+            } else {
+              this.dialog_config.title = "编辑项目"
+              this.project=JSON.parse(JSON.stringify(row));
+            }
+        },
+
+        submit_form: function() {
+          this.$refs['project_form'].validate((valid) => {
+            if (valid) {
+              if(typeof(this.project.id) == "undefined") {
+                var resp = create_project(this.project)
+              }else {
+                var resp = update_project(this.project)
               }
-            })
-          },
 
-          delete_project: function(index, row) {
-              // console.log(index, row);
-              del_project(row)
-              .then(resp => this.get_projects())
-              .catch(error => console.log(error))
-          },
-
-          get_projects: function(params) {
-              get_project_list_page(params)
-              .then(resp => {
-                this.total = resp.data.result.total
-                this.tableData = resp.data.result.projects
+              resp.then(resp => {
+                if (resp.status !== true) {
+                  this.$message({message: resp.message,type: 'error'});
+                } else {
+                  this.dialog_config.edit_dialog_form_visible=false;
+                  this.get_projects()
+                }
               })
               .catch(error => console.log(error))
-          },
-          handleSizeChange(val) {
-            // console.log(`每页 ${val} 条`);
-            this.pagesize = val;
-            var param = {"page": this.currpage, "size": val}
-            this.get_projects(param)
-          },
-          handleCurrentChange(val) {
-            // console.log(`当前页: ${val}`);
-            this.currpage = val;
-            var param = {"page": val, "size": this.pagesize}
-            this.get_projects(param)
-          }
-      }
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          })
+        },
+
+        delete_project: function(index, row) {
+            // console.log(index, row);
+            del_project(row)
+            .then(resp => this.get_projects())
+            .catch(error => console.log(error))
+        },
+
+        get_projects: function(params) {
+            get_project_list_page(params)
+            .then(resp => {
+              this.total = resp.data.result.total
+              this.tableData = resp.data.result.projects
+              // console.log(this.tableData.length)
+              // console.log(Object.keys(this.tableData[100]))
+            })
+            .catch(error => console.log(error))
+        },
+    }
   }
 </script>
 
