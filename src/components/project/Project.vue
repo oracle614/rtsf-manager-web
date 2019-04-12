@@ -118,7 +118,7 @@
               }
 
               resp.then(resp => {
-                if (resp.status !== true) {
+                if (resp.data.status !== true) {
                   this.$message({message: resp.message,type: 'error'});
                 } else {
                   this.dialog_config.edit_dialog_form_visible=false;
