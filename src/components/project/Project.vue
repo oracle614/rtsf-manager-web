@@ -5,9 +5,9 @@
         <div slot="table">
           <el-button size="mini" @click="form_handler" >添加项目</el-button>
           <el-table :data="tableData" style="width: 100%">
-            <el-table-column type="index" :index="indexMethod" width="180"/>
-            <el-table-column prop="name" label="项目名称" width="180"/>
-            <el-table-column prop="module" label="项目模块" width="180"/>
+            <el-table-column type="index" :index="indexMethod"/>
+            <el-table-column prop="name" label="项目名称"/>
+            <el-table-column prop="module" label="项目模块"/>
             <el-table-column prop="comment" label="备注"/>
             <el-table-column prop="c_time" label="创建时间"/>
             <el-table-column prop="u_time" label="更新时间"/>

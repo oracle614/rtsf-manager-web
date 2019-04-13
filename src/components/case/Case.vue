@@ -5,9 +5,9 @@
           <div slot="table">
             <el-button size="mini" @click="form_handler" >添加用例</el-button>
             <el-table :data="tableData" style="width: 100%">
-              <el-table-column type="index" :index="indexMethod" width="180"/>
-              <el-table-column prop="project_name" label="隶属项目" width="180"/>
-              <el-table-column prop="project_module" label="隶属模块" width="180"/>
+              <el-table-column type="index" :index="indexMethod"/>
+              <el-table-column prop="project_name" label="隶属项目"/>
+              <el-table-column prop="project_module" label="隶属模块"/>
               <el-table-column prop="name" label="名称"/>
               <el-table-column prop="desc" label="描述"/>
               <el-table-column prop="case_type" label="类型"/>
@@ -34,16 +34,16 @@
               <!-- <el-form-item label="隶属项目" prop="proj_name">
                 <el-input v-model="case_data.project_name"/>
               </el-form-item> -->
-              <el-form-item label="隶属项目"  prop="proj_name">
+              <el-form-item label="隶属项目"  prop="project_name">
                 <el-autocomplete v-model="case_data.project_name" :fetch-suggestions="querySearch" placeholder="请输入内容" @focus="loadAutoData('name')"/>                
               </el-form-item>
-              <el-form-item label="隶属模块" prop="proj_module">
+              <el-form-item label="隶属模块" prop="project_module">
                 <el-autocomplete v-model="case_data.project_module" :fetch-suggestions="querySearch" placeholder="请输入内容" @focus="loadAutoData('module')"/>                
               </el-form-item>
-              <el-form-item label="用例名称" prop="case_name">
+              <el-form-item label="用例名称" prop="name">
                 <el-input v-model="case_data.name"/>
               </el-form-item>
-              <el-form-item label="用例描述" prop="case_desc">
+              <el-form-item label="用例描述" prop="desc">
                 <el-input v-model="case_data.desc"/>
               </el-form-item>
               <el-form-item label="用例类型" prop="case_type">
@@ -51,13 +51,13 @@
                   <el-option v-for="item in select_case_type" :key="item" :value="item"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item v-if="case_data.case_type ==='api' || case_data.case_type === 'suite'" label="用例别名" prop="case_func">
+              <el-form-item v-if="case_data.case_type ==='api' || case_data.case_type === 'suite'" label="用例别名" prop="func">
                 <el-input v-model="case_data.func"/>
               </el-form-item>
-              <el-form-item label="责任人" prop="case_responsible">
+              <el-form-item label="责任人" prop="responsible">
                 <el-input v-model="case_data.responsible"/>
               </el-form-item>
-              <el-form-item label="执行人" prop="case_tester">
+              <el-form-item label="执行人" prop="tester">
                 <el-input v-model="case_data.tester"/>
               </el-form-item>
 
@@ -114,7 +114,7 @@
                         message: '用户名只能为中文、字母、数字、下划线'
                     }
                 ],
-                case_name:[
+                name:[
                     {
                         required: true,
                         message: '请输入用例名称',
@@ -129,6 +129,13 @@
                     {
                         required: true,
                         message: '用例类型不能为空',
+                        trigger: 'blur'
+                    },
+                ],
+                func:[
+                    {
+                        required: true,
+                        message: '用例别名不能为空',
                         trigger: 'blur'
                     },
                 ]
